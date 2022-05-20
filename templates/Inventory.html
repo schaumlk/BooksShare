@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block header %} Books Share {% endblock %}
+{% block content %}
+
+        <p>&nbsp;</p>
+
+        <div id="insert">
+            <form method="" id="">
+            <legend><strong>Search Inventory</strong></legend>
+            <fieldset class="field">
+                <label> Inventory </label> <input type="text" name="uid">
+            </fieldset>
+            <input class="btn" type="submit" id="addUser" value="Search Inventory">
+            </form>
+        </div>
+
+        <div id="browse">
+            <!-- Can include buttons here above the table -->
+            <table border="1" cellpadding="5">
+                <tr>
+                    <th>inventory_id</th>
+                    <th>quantity</th>
+                    <th>created_at</th>
+                    <th>modified_at</th> 
+                    <th> edit</th>
+                    <th> delete</th>
+                </tr>
+                {% for inventory in Inventory %}
+                <tr>
+                    <td align="center" >{{ inventory.inventory_id }}</td>
+                    <td align="center">{{ inventory.quantity }}</td>
+                    <td align="center" >{{inventory.created_at}}</td>
+                    <td align="center" >{{inventory.modified_at}}</td>
+                    <td><button type="button"> edit </button></td>
+                    <td><button type="button"> delete </button></td>
+                </tr>
+                {% endfor %}
+                
+            </table>
+            <p>&nbsp;</p> <!-- just some space for looks -->
+        </div> 
+        <div id="insert">
+            <form method="" id="">
+            <legend><strong>Add Inventory</strong></legend>
+            <fieldset class="field">
+                <label> inventory_id </label> <input type="text" name="uid">
+                <label> quantity </label> <input type="text" name="uname">
+                <label> created_at </label> <input type="timestamp" name="createdat">
+                <label> modified_at </label> <input type="timestamp" name="modifiedat">
+            </fieldset>
+            <input class="btn" type="submit" id="addTransaction" value="Add Inventory">
+            <input class="btn" type="button" value="Cancel"> 
+            </form>
+        </div> <!-- insert ends -->
+
+        
+        {% endblock %}

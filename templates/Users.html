@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block header %} Books Share {% endblock %}
+{% block content %}
+        <div id="browse">
+            <!-- Can include buttons here above the table -->
+            <table border="1" cellpadding="5">
+                <tr>
+                    <th>user_id</th>
+                    <th>username</th>
+                    <th>password</th>
+                    <th>first_name</th>
+                    <th>last_name</th>
+                    <th>email</th>
+                    <th>created_at</th>
+                    <th>modified_at</th>
+                    <th> edit</th>
+                    <th> delete</th> 
+                </tr>
+                <tr>
+                    <td align="center" > 1423 </td>
+                    <td align="center"> cupcake </td>
+                    <td align="center" > gabjjsd </td>
+                    <td align="center" > Abby </td>
+                    <td align="center" >Miller</td>
+                    <td align="center">amiller@gmail.com</td>
+                    <td align="center" >12/20/2021</td>
+                    <td align="center" >4/17/2022</td>
+                    <td><button type="button"> edit </button></td>
+                    <td><button type="button"> delete </button></td>
+                </tr>
+
+                <tr>
+                    <td align="center" >56789</td>
+                    <td align="center">math72</td>
+                    <td align="center" >jdhab</td>
+                    <td align="center" >Jacob</td>
+                    <td align="center" >Smith</td>
+                    <td align="center">jakey@gmail.com</td>
+                    <td align="center" >4/28/2022</td>
+                    <td align="center" >4/12/2022</td>
+                    <td><button type="button"> edit </button></td>
+                    <td><button type="button"> delete </button></td>
+                </tr>
+
+                <tr>
+                    <td align="center" >1278</td>
+                    <td align="center">doglover411</td>
+                    <td align="center" >kjnc</td>
+                    <td align="center" >Kailey</td>
+                    <td align="center" >Alcott</td>
+                    <td align="center">ilovedogs2@gmail.com</td>
+                    <td align="center" >12/19/2021</td>
+                    <td align="center" >4/12/2022</td>
+                    <td><button type="button"> edit </button></td>
+                    <td><button type="button"> delete </button></td>
+                </tr>
+                <!-- {% for user in Users %}
+                <tr>
+                    <td align="center" >{{ user.user_id }}</td>
+                    <td align="center">{{ user.username }}</td>
+                    <td align="center" >{{ user.password }}</td>
+                    <td align="center" >{{ user.first_name }}</td>
+                    <td align="center" >{{user.last_name}}</td>
+                    <td align="center">{{user.email}}</td>
+                    <td align="center" >{{user.created_at}}</td>
+                    <td align="center" >{{user.modified_at}}</td>
+                    <td><button type="button"> edit </button></td>
+                    <td><button type="button"> delete </button></td>
+                </tr>
+                {% endfor %} -->
+                
+            </table>
+            <p>&nbsp;</p> <!-- just some space for looks -->
+        </div> 
+        <div id="insert">
+            <form method="" id="">
+            <legend><strong>Add User</strong></legend>
+            <fieldset class="field">
+                <label> user_id </label> <input type="text" name="uid">
+                <label> username </label> <input type="text" name="uname">
+                <label> password </label> <input type="text" name="password">
+                <label> first_name </label> <input type="text" name="fname">
+                <label> last_name </label> <input type="text" name="lname">
+                <label> email </label> <input type="text" name="uemail">
+                <label> created_at </label> <input type="timestamp" name="createdat">
+                <label> modified_at </label> <input type="timestamp" name="modifiedat">
+            </fieldset>
+            <input class="btn" type="submit" id="addUser" value="Add User">
+            <input class="btn" type="button" value="Cancel"> 
+            </form>
+        </div> <!-- insert ends -->
+   {% endblock %}
