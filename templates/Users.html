@@ -1,0 +1,156 @@
+<html>
+{% extends "base.html" %}
+{% block header %} Books Share {% endblock %}
+{% block content %}
+<!-- Adapted from the people.html UI design -->
+<head>
+	<title>Books Share</title>
+	<link href="style.css" rel="stylesheet" type="text/css" />
+	<script language="JavaScript">
+	function showform(dowhat) {
+		/*
+		 * browse, insert, update, delete- only one visible
+		 */
+		if(dowhat == 'insert') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		} 
+		else if(dowhat == 'update') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'none';
+
+		} else if(dowhat == 'delete') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'block';
+
+		} else if(dowhat == 'all') {
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'block';
+		} 
+		else { //by default display browse
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		}
+	}
+
+	function newUser() {
+		showform('insert');
+	}
+
+	function updateUser(pid) {
+		showform('update');
+	}
+
+	function deleteUser(pid) {
+		showform('delete');
+	}
+
+	function browseUser() {
+		showform('browse');
+	}
+
+	function showAll() {
+		showform('all');
+	}
+	</script>
+</head>
+
+<body onload="browseUsers()">
+
+	<h2>Users</h2>
+	
+	<div id="browse">
+		<p><a href="#" onClick="newUser()">Add New</a> </p>
+		
+		<table border="1" cellpadding="5">
+            <!-- Access data tuple passed from app.py --> 
+            {% if data %}
+			    <thead>
+				    <tr>
+					    <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+					    
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+					
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
+
+				<tbody>
+					<!-- Now, iterate through every item in data -->
+					{% for item in data %}
+					    <tr>
+						    <!-- Then iterate through every key in the current item dictionary -->
+                            {% for key in item.keys() %}
+
+						    <!-- Create a <td> element with the value of that key in it -->
+						    <td> {{item[key]}} </td> 
+                            {% endfor %}
+
+                            <!-- Create our edit/delete buttons -->
+						    <td><a href="edit_users/{{item['user_id']}}" class="btn btn-default">Edit</a></td>
+						    <td><a href="delete_users/{{item['user_id']}}" class="btn btn-default">Delete</a></td>
+
+					    </tr> 
+                        {% endfor %} 
+                {% endif %} 
+        </table>   
+	<p>&nbsp;</p>
+	</div>	<!-- browse -->
+
+	<div id="insert">
+
+		<!-- form to INSERT new data into Books-->
+
+		<form id="insertUser" action="/User" method="post">
+			<legend><strong>Add User</strong></legend>
+			<fieldset>
+                <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
+				<label for="user_id">user_id:</label>
+				<input type="text" class="form-control" id="user_id" name="user_id" placeholder="" required>
+
+				<label for="username">username:</label>
+				<input type="text" class="form-control" id="username" name="username" placeholder="" required>
+
+				<label for="password">password:</label>
+				<input type="text" class="form-control" id="password" name="password" placeholder="" required>
+
+				<label for="first_name">first_name:</label>
+				<input type="text" class="form-control" id="first_name" name="first_name" placeholder="" required>
+
+				<label for="last_name">last_name:</label>
+				<input type="text" class="form-control" id="last_name" name="last_name" placeholder="" required>
+
+                <label for="email">email:</label>
+				<input type="text" class="form-control" id="email" name="email" placeholder="" required>
+
+				<label for="created_at">created_at:</label>
+				<input type="text" class="form-control" id="created_at" name="created_at" placeholder="" >
+
+				<label for="modified_at">modified_at:</label>
+				<input type="text" class="form-control" id="modified_at" name="modified_at" placeholder="" >
+
+
+
+
+            <!-- Create 'Add User' and 'Cancel' buttons -->
+			<input type="submit" value="Add User" name="Add_User" class="btn btn-primary">
+			<input class="btn" type="button" value="Cancel" onClick="browseUsers()"> 
+        
+		</form>
+	</div><!--insert-->
+
+</body>
+{% endblock %}
+</html>

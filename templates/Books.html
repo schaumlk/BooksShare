@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block header %} Books Share {% endblock %}
+{% block content %}
+
+        <p>&nbsp;</p>
+
+        <div id="insert">
+            <form method="" id="">
+            <legend><strong>Search Books</strong></legend>
+            <fieldset class="field">
+                <label> Book </label> <input type="text" name="uid">
+            </fieldset>
+            <input class="btn" type="submit" id="addUser" value="Search Books">
+            </form>
+        </div>
+
+        <div id="browse">
+            <!-- Can include buttons here above the table -->
+            <table border="1" cellpadding="5">
+                <tr>
+                    <th>book_id</th>
+                    <th>title</th>
+                    <th>description</th>
+                    <th>price</th>
+                    <th>inventory_id</th>
+                    <th>created_at</th>
+                    <th>modified_at</th> 
+                </tr>
+                {% for book in Books %}
+                <tr>
+                    <td align="center" >{{ book.book_id }}</td>
+                    <td align="center">{{ book.title }}</td>
+                    <td align="center" >{{ book.description }}</td>
+                    <td align="center" >{{ book.price }}</td>
+                    <td align="center" >{{ book.inventory_id }}</td>
+                    <td align="center" >{{book.created_at}}</td>
+                    <td align="center" >{{book.modified_at}}</td>
+                </tr>
+                {% endfor %}
+                
+            </table>
+            <p>&nbsp;</p> <!-- just some space for looks -->
+        </div> 
+        <div id="insert">
+            <form method="" id="">
+            <legend><strong>Add Book</strong></legend>
+            <fieldset class="field">
+                <label> book_id </label> <input type="text" name="uid">
+                <label> title </label> <input type="text" name="uname">
+                <label> description </label> <input type="text" name="password">
+                <label> price </label> <input type="text" name="fname">
+                <label> inventory_id </label> <input type="text" name="fname">
+                <label> created_at </label> <input type="timestamp" name="createdat">
+                <label> modified_at </label> <input type="timestamp" name="modifiedat">
+            </fieldset>
+            <input class="btn" type="submit" id="addBook" value="Add Book">
+            <input class="btn" type="button" value="Cancel"> 
+            </form>
+        </div> <!-- insert ends -->
+        </body>
+        {% endblock %}
