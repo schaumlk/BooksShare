@@ -70,27 +70,30 @@
 #     book_id = db.Column(db.Integer, db.ForeignKey('book.book_id'))
 
 ###########
-from flask import Flask, render_template
-from flask import request, redirect
-from flask_mysqldb import MySQL
-#import database.db_credentials import host, user, passwd, db
-#import database.db_connector 
+from flask import Flask, render_template, json, redirect
 import os
-import database.db_connector as db
+from flask_mysqldb import MySQL
+import MySQLdb
+from flask import request
 from dotenv import load_dotenv, find_dotenv
+from datetime import datetime
 
-#load_dotenv(find_dotenv)
 
 # Configuration
 
 app = Flask(__name__)
-db_connection = db.connect_to_database
 
-app.config['MYSQL_HOST'] = os.environ.get("340DBHOST")
-app.config['MYSQL_USER'] = os.environ.get("340DBUSER")
-app.config['MYSQL_PASSWORD'] = os.environ.get("340DBPW")
-app.config['MYSQL_DB'] = database = os.environ.get("340DB")
+app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
+app.config['MYSQL_USER'] = 'cs340_schaumlk'
+app.config['MYSQL_PASSWORD'] = '2860' #last 4 of onid
+app.config['MYSQL_DB'] = 'cs340_schaumlk'
 app.config['MYSQL_CURSORCLASS'] = "DictCursor"
+
+host = 'classmysql.engr.oregonstate.edu'
+user = 'cs340_schaumlk'
+password = '2860' #last 4 of onid
+db = 'cs340_schaumlk'
+cursorClass = "DictCursor"
 
 mysql = MySQL(app)
 #######
@@ -101,91 +104,91 @@ mysql = MySQL(app)
 def landingPage():
     return render_template("base.html")
 
-@app.route("/User", method=["POST", "GET"])
+@app.route("/User", methods=["POST", "GET"])
 def users():
+    # insert (add)
+    if request.method == 'POST':
+        if request.form.get("Add_User"):
+            user_id = request.form['user_id']
+            username = request.form['username']
+            password = request.form['password']
+            first_name = request.form['first_name']
+            last_name = request.form['last_name']
+            email = request.form['email']
+            created_at = datetime.now()
+            modified_at = datetime.now()
+
+            query = 'INSERT INTO Users (user_id, username, password, first_name, last_name, email, created_at, modified_at) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
+       
+            cur = mysql.connection.cursor()
+            cur.execute(query, (user_id, username, password, first_name, last_name, email, created_at, modified_at))
+            mysql.connection.commit()
+
+            return redirect("User")
+
+    # display
+    query = "SELECT user_id, username, password, first_name, last_name, email, created_at, modified_at from Users"
+    cur = mysql.connection.cursor()
+    cur.execute(query)
+    data = cur.fetchall()
+
+    return render_template("Users.html",data=data)
+
+# update
+@app.route("/edit_users/<int:id>", methods=["POST", "GET"])
+def update_users(id):
+    
     if request.method == "GET":
-        query = "SELECT * FROM Users;"
-        cur = mysql.connection.cursor('127.0.0.1')
+
+        query = "SELECT user_id, username, password, first_name, last_name, email, created_at, modified_at from Users where user_id = %s" % (id)
+        cur = mysql.connection.cursor()
         cur.execute(query)
-        users = cur.fetchall()
-        return render_template("Users.html", users=users)
+        data = cur.fetchall()
+
+        return render_template("edit_users.html", data=data, userID = id)
+
+    # commit changes
+    if request.method == "POST":
+        if request.form.get("Edit_User"):
+            user_id = request.form['user_id']
+            username = request.form['username']
+            password = request.form['password']
+            first_name = request.form['first_name']
+            last_name = request.form['last_name']
+            email = request.form['email']
+            created_at = datetime.now()
+            modified_at = datetime.now()
+
+            query = "UPDATE Users SET user_id = %s, username = %s, password = %s, first_name = %s, last_name = %s, email = %s, created_at = %s, modified_at = %s WHERE Users.user_id = %s"
+            cur = mysql.connection.cursor()
+            cur.execute(query, (user_id, username, password, first_name, last_name, email, created_at, modified_at))
+            mysql.connection.commit()
+
+            return redirect("User")
+
+# delete
+@app.route("/delete_users/<int:id>", methods=["POST", "GET"])
+def delete_user(id):
+
+    if request.method == "GET":
+
+        query = "SELECT user_id, username, password, first_name, last_name, email, created_at, modified_at from Users WHERE user_id = %s" % (id)
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        return render_template("delete_users.html", data=data, userID=id)
 
     if request.method == "POST":
-        if request.form.get("Add_Order"):
-            user_id = request.form["user_id"]
-            username = request.form["username"]
-            password = request.form["password"]
-            first_name = request.form["first_name"]
-            last_name = request.form["last_name"]
-            email = request.form["email"]
-            created_at = request.form["created_at"]
-            modified_at = request.form["modified_at"]
 
-        query = """INSERT INTO Users (user_id, username, password, first_name, last_name, email, created_at, modified_at)
-        VALUES (%s, %s, %s, %s)
-        """
-        cur = mysql.connection.cursor('127.0.0.1')
-        cur.execute(query, (user_id, username, password, first_name, last_name, email, created_at, modified_at))
+        if request.form.get("Delete_User"):
+            user_id = request.form["user_id"]
+            
+        query = "DELETE FROM Users WHERE Users.user_id = '%s';"
+        cur = mysql.connection.cursor()
+        cur.execute(query, (user_id,))
         mysql.connection.commit()
 
         return redirect("/User")
-
-@app.route('/edit_user/<int:id>', methods=['GET', 'POST'])
-def edit_user():
-    
-    if request.method == 'GET':
-        # query to add fisherman
-        query = "SELECT * from User"
-        cur = mysql.connection.cursor()
-        cur.execute(query)
-        users = cur.fetchall()
-
-        return render_template('edit.html', users=users, username='username', email='email')
-
-    if request.method == 'POST':
-        if request.form.get("Edit_User"):
-            user_id = request.form["user_id"]
-            username = request.form["username"]
-            password = request.form["password"]
-            first_name = request.form["first_name"]
-            last_name = request.form["last_name"]
-            email = request.form["email"]
-            created_at = request.form["created_at"]
-            modified_at = request.form["modified_at"]
-        
-        updateQuery = """
-        UPDATE Users
-        SET 
-        user_id = %s,
-        username = %s,
-        password = %s,
-        first_name = %s
-        last_name = %s,
-        email = %s
-        WHERE
-        user_id = %s
-        """
-        cur = mysql.connection.cursor()
-        cur.execute(query)
-        users = cur.fetchall()
-
-        return redirect("/User")
-
-@app.route("/delete_user/<int:id>", methods=["POST", "GET"])
-def delete_user(id):
-    
-    if request.method == "GET":
-        userQuery = """
-        SELECT
-        user_id AS "User #",
-        DELETE FROM Books WHERE book_id = book_id
-        """
-        cur = mysql.connection.cursor()
-        cur.execute(userQuery)
-        users = cur.fetchall()
-
-        return render_template("delete.html", users=users, username='username', email='email')
-
 
 @app.route("/Author")
 def authors():
@@ -207,11 +210,18 @@ def inventory():
 def book_has_author():
     return render_template("Books_Has_Authors.html") #Books_Has_Authors = Books_has_Authors.query.all())
 
+def executeQuery(query = None, queryParams = ()):
+    db_connection = MySQLdb.connect(host,user,password,db)
+    cursor = db_connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute(query, queryParams)
+    db_connection.commit()
+    return cursor
+
 
 # Listener
 
 if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 58222)) 
+    port = int(os.environ.get('PORT', 58285)) 
     #                                 ^^^^
     #              You can replace this number with any valid port
     
