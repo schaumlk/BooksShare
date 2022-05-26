@@ -7,8 +7,8 @@
 
 <body>
     <div>
-        <form id="deleteUsers" action="/delete_users/{{userID}}" method="post">
-            <caption> Delete This User? </caption>
+        <form id="deleteAuthors" action="/delete_authors/{{authorID}}" method="post">
+            <caption> Delete This Author? </caption>
             <!-- Access data tuple passed from app.py -->
             <table border="1" cellpadding="5">
             {% if data %}
@@ -39,11 +39,11 @@
                     {% endfor %} 
             {% endif %} 
 
-            <input type="hidden" value="{{userID}}" class="form-control" id="user_id" name="user_id" required>
+            <input type="hidden" value="{{authorID}}" class="form-control" id="author_id" name="author_id" required>
         </table>
         
-        <input type="submit" value="Delete User" name="deleteUsers" class="btn btn-primary">
-        <a href='/User'><input class="btn" type="button" value="cancel"></a>
+        <input type="submit" value="Delete Author" name="deleteAuthors" class="btn btn-primary">
+        <a href='/Author'><input class="btn" type="button" value="cancel"></a>
         </form>
     </div>
 </body>

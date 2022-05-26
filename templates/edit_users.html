@@ -40,7 +40,7 @@
         </table>
         
          <div id="edit">
-            <!-- form to edit data in Books-->
+            <!-- form to edit data in Users-->
 
             <form id="editUser" action="/edit_users/{{userID}}" method="post">
                 <legend><strong>Edit User</strong></legend>
@@ -69,11 +69,8 @@
                     
                     <label for="modifed_at">modifed_at:</label>
                     <input type="text" value="{{data[0].modifed_at}}" class="form-control" id="modifed_at" name="modifed_at" >
-                    
-
-                        <!-- End of this for loop -->
                         
-                    </select>	
+                    	
                 
                 </fieldset>
                 <input type="submit" value="Edit User" name="Edit_User" class="btn btn-primary" style="margin:.5rem;">

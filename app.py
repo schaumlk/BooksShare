@@ -1,75 +1,3 @@
-# # 
-# from flask import Flask, render_template
-# import os
-# from flask_sqlalchemy import SQLAlchemy
-# import database.db_connector as db
-
-
-# # Configuration
-
-# app = Flask(__name__)
-# db_connection = db.connect_to_database()
-
-# app.config['MYSQL_HOST'] = 'classmysql.engr.oregonstate.edu'
-# app.config['MYSQL_USER'] = 'cs340_schaumlk'
-# app.config['MYSQL_PASSWORD'] = '2860'
-# app.config['MYSQL_DB'] = 'cs340_schaumlk'
-# app.config['MYSQL_CURSORCLASS'] = "DictCursor"
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.sqlite3'
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-# db = SQLAlchemy(app)
-
-
-# class User(db.Model):
-#     user_id = db.Column('user_id', db.Integer, primary_key = True)
-#     username = db.Column(db.String(70))
-#     password = db.Column(db.String(15))
-#     first_name = db.Column(db.String(50))
-#     last_name = db.Column(db.String(50))
-#     email = db.Column(db.String(75))
-#     created_at = db.Column(db.String(50))
-#     modified_at = db.Column(db.String(50))
-
-#     def __repr__(self):
-#         return f"User: {self.username} name: {self.first_name} {self.last_name} email: {self.email} joined on: {str(self.created_at)}" 
-
-# class Inventory(db.Model):
-#     inventory_id = db.Column('inventory_id', db.Integer, primary_key = True)
-#     quantity = db.Column(db.Integer)
-#     created_at = db.Column(db.String(50))
-#     modified_at = db.Column(db.String(50))
-
-# class Transaction(db.Model):
-#     transaction_id = db.Column('transaction_id', db.Integer, primary_key = True)
-#     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
-#     inventory_id = db.Column(db.Integer, db.ForeignKey('inventory.inventory_id'))
-#     total_price = db.Column(db.Numeric(10,2))
-#     created_at = db.Column(db.String(50))
-#     modified_at = db.Column(db.String(50))
-    
-
-# class Book(db.Model):
-#     book_id = db.Column('book_id', db.Integer, primary_key = True)
-#     title = db.Column(db.String(25))
-#     description = db.Column(db.String(200))
-#     price = db.Column(db.Numeric(10,2))
-#     inventory_id = db.Column(db.Integer, db.ForeignKey('inventory.inventory_id'))
-#     created_at = db.Column(db.String(50))
-#     modified_at = db.Column(db.String(50))
-    
-
-# class Author(db.Model):
-#     author_id = db.Column('author_id', db.Integer, primary_key = True)
-#     author_fname = db.Column(db.String(50))
-#     author_lname = db.Column(db.String(50))
-#     #book_id = db.Column(db.Integer, db.ForeignKey('book.book_id'))
- 
-# class Books_has_Authors(db.Model):
-#     author_id = db.Column(db.Integer, db.ForeignKey('author.author_id'))
-#     book_id = db.Column(db.Integer, db.ForeignKey('book.book_id'))
-
-###########
 from flask import Flask, render_template, json, redirect
 import os
 from flask_mysqldb import MySQL
@@ -161,10 +89,10 @@ def update_users(id):
 
             query = "UPDATE Users SET user_id = %s, username = %s, password = %s, first_name = %s, last_name = %s, email = %s, created_at = %s, modified_at = %s WHERE Users.user_id = %s"
             cur = mysql.connection.cursor()
-            cur.execute(query, (user_id, username, password, first_name, last_name, email, created_at, modified_at))
+            cur.execute(query, (user_id, username, password, first_name, last_name, email, created_at, modified_at, user_id))
             mysql.connection.commit()
 
-            return redirect("User")
+            return redirect("/User")
 
 # delete
 @app.route("/delete_users/<int:id>", methods=["POST", "GET"])
@@ -180,20 +108,96 @@ def delete_user(id):
 
     if request.method == "POST":
 
-        if request.form.get("Delete_User"):
-            user_id = request.form["user_id"]
-            
-        query = "DELETE FROM Users WHERE Users.user_id = '%s';"
+        
+        user_id = request.form["user_id"]
+        #return f"{request.form}"
+        query = f"DELETE FROM Users WHERE Users.user_id = %s"
         cur = mysql.connection.cursor()
         cur.execute(query, (user_id,))
         mysql.connection.commit()
 
         return redirect("/User")
 
-@app.route("/Author")
+@app.route("/Author", methods=["GET"])
 def authors():
-    return render_template("Authors.html") #Authors = Author.query.all())
+    # display
+    query = "SELECT author_id, author_fname, author_lname, book_id from Authors"
+    cur = mysql.connection.cursor()
+    cur.execute(query)
+    data = cur.fetchall()
 
+    return render_template("Authors.html", data=data)
+
+@app.route("/Author", methods=["POST"])
+def postAuthors():
+    # insert (add)
+    try:
+    
+        author_id = request.form['author_id']
+        author_fname = request.form['author_fname']
+        author_lname = request.form['author_lname']
+        book_id = request.form['book_id']
+
+        query = 'INSERT INTO Authors (author_id, author_fname, author_lname, book_id) VALUES (%s, %s, %s, %s)'
+
+        cur = mysql.connection.cursor()
+        cur.execute(query, (author_id, author_fname, author_lname, book_id))
+        mysql.connection.commit()
+    except Exception as E:
+        return E
+    return redirect("Author")
+
+# update
+@app.route("/edit_authors/<int:id>", methods=["POST", "GET"])
+def update_authors(id):
+    
+    if request.method == "GET":
+
+        query = "SELECT author_id, author_fname, author_lname, book_id from Authors where author_id = %s" % (id)
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+
+        return render_template("edit_authors.html", data=data, AuthorID = id)
+
+    # commit changes
+    if request.method == "POST":
+        if request.form.get("Edit_Author"):
+            author_id = request.form['author_id']
+            author_fname = request.form['author_fname']
+            author_lname = request.form['author_lname']
+            book_id = request.form['book_id']
+
+            query = "UPDATE Users SET author_id = %s, author_fname = %s, author_lname = %s, book_id = %s WHERE Authors.author_id = %s"
+            cur = mysql.connection.cursor()
+            cur.execute(query, (author_id, author_fname, author_lname, book_id, author_id))
+            mysql.connection.commit()
+
+            return redirect("/Author")
+
+@app.route("/delete_authors/<int:id>", methods=["POST", "GET"])
+def delete_author(id):
+
+    if request.method == "GET":
+
+        query = "SELECT author_id, author_fname, author_lname, book_id from Authors where author_id = %s" % (id)
+        cur = mysql.connection.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        return render_template("delete_authors.html", data=data, authorID=id)
+
+    if request.method == "POST":
+        
+        author_id = request.form["author_id"]
+        #return f"{request.form}"
+        query = f"DELETE FROM Authors WHERE Authors.author_id = %s"
+        cur = mysql.connection.cursor()
+        cur.execute(query, (author_id,))
+        mysql.connection.commit()
+
+        return redirect("/Author")
+
+    
 @app.route("/Transaction")
 def transactions():
     return render_template("Transactions.html") #Transactions = Transaction.query.all())
@@ -221,12 +225,12 @@ def executeQuery(query = None, queryParams = ()):
 # Listener
 
 if __name__ == "__main__":
-    port = int(os.environ.get('PORT', 58285)) 
+    port = int(os.environ.get('PORT', 52285)) #58285
     #                                 ^^^^
     #              You can replace this number with any valid port
-    
-    app.run(host = "flip2.engr.oregonstate.edu", port= port, debug = True) 
+    app.run(port=port, debug = True)
+    #app.run(host = "flip1.engr.oregonstate.edu", port= port, debug = True) 
 
-# app = Flask(__name__)
+
 
 
