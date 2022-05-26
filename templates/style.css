@@ -31,6 +31,8 @@ head {
 }
 
 table {
+    margin-left: auto;
+    margin-right: auto;
     padding: 10px;
     border: none; 
     border-collapse: collapse;
