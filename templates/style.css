@@ -1,5 +1,5 @@
 .Header{
-    background-color: rgb(213, 142, 0);
+    background-color: rgb(171, 171, 171);
     height: 70px;
 }
 
@@ -53,26 +53,6 @@ ul.nav-bar li{
     font-size: 30px;
 }
 
-.table-container{
-    margin-top: 10px;
-}
-
-.table{
-    border: 2px solid black;
-    margin-left: auto;
-    margin-right: auto;
-    width: 800px;
-}
-
-.table-row{
-    border: 2px solid black; 
-}
-
-.table-column{
-    border: 2px solid black;
-    width: 50px; 
-}
-
 .fields{
     display: flex;
     flex-direction: row;
@@ -82,20 +62,74 @@ ul.nav-bar li{
     width: 700px;
 }
 
-#btn{
-    margin: 5px;
-    width: 150px;
-    background-color: #1c77bd;
-    border-width: 1px solid black;
-    color: black;
-    font-weight: bold;
+a {
+    color: rgb(88, 88, 181);
 }
 
-#btn btn-primary{
-    margin: 5px;
-    width: 150px;
-    background-color: #3ca9d0;
-    border-width: 1px solid black;
-    color: black;
-    font-weight: bold;
+a:hover {
+    color: rgb(38, 163, 163);
+}
+
+body {
+    margin: 0%;
+    padding: 0%;
+    font-family: "Montserrat";
+}
+
+table {
+    border-collapse: collapse;
+    border-color: black;
+    box-shadow: 0px 3px 3px grey;
+    border-style: outset;
+}
+
+table th {
+    background-color: #046b99;
+    color: white;
+}
+
+th,
+td {
+    border: 1px solid;
+    padding: 5px;
+    text-align: center;
+    border-color: black;
+}
+
+td {
+    padding: 0.5em;
+}
+
+table tr:nth-child(even) {
+    background-color: lightblue;
+}
+
+table tr:nth-child(odd) {
+    background-color: rgb(73, 136, 157);
+}
+
+select {
+    display: block;
+    margin: 10px 0 10px 0;
+    padding: 5px;
+}
+
+button,
+input,
+input[type="submit"],
+.textArea {
+    box-shadow: 0 1px 1px grey;
+    display: block;
+    margin: 10px 0 10px 0;
+    padding: 5px;
+}
+
+button:hover,
+input[type="submit"]:hover,
+select {
+    color: coral;
+}
+
+input[type="submit"] {
+    margin: 20px 0 0 0;
 }
