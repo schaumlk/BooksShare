@@ -42,7 +42,17 @@ table {
     min-width: 275px;
 }
 
-table th { 
+table td:nth-child(3n+1) {
+    background-color: #bb6bcb;
+}
+table td:nth-child(3n+2) {
+    background-color: #c667ae;
+}
+table td:nth-child(3n+3) {
+    background-color: #67b6c6;
+}
+
+th { 
     padding-left: 5px;
     padding-right: 10px;
     padding-top: 5px; 
@@ -51,7 +61,7 @@ table th {
     border-left: 1px solid  rgb(183, 183, 183); 
 }
 
-table td { 
+td { 
     border-left: 1px solid rgb(183, 183, 183); 
     font-family: 'Akshar', sans-serif;
     font-weight: 300;
@@ -73,4 +83,3 @@ table td {
     border-style: solid;
     transition: 0.4s;
 }
-
