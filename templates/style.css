@@ -96,3 +96,16 @@ td {
     border-style: solid;
     transition: 0.4s;
 }
+
+.btn {
+padding: 0.15rem 0.50rem;
+}
+
+.nav-link {
+    padding: 0.5rem;
+    color: #616161;
+}
+
+.navbar {
+    border-radius: 5px 5px 0px 0px;
+}
