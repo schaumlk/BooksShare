@@ -24,6 +24,19 @@ body {
 
 }
 
+.homepage-image {
+    max-width: 80%;
+    height: auto;
+}
+
+.pageTitle {
+    line-height: 75%;
+}
+
+.pageSubtitle {
+    margin-bottom: 10px;
+}
+
 head {
     width: 960px;
     margin: 0 auto;
