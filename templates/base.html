@@ -5,6 +5,18 @@
     </head>
     <body>
         <h1>{% block header%} {% endblock %}</h1>
+        <nav class="navbar navbar-fixed-top navbar-light bg-light">
+        <div class="navbar-header pull-left">
+          <button type="button" class="btn btn-default navbar-btn"><a class="navbar-brand" href="/">Superior Shows</a></button>
+          <button type="button" class="btn btn-default navbar-btn"><a class="nav-link" href="User">Users</a></button>
+          <button type="button" class="btn btn-default navbar-btn"><a class="nav-link" href="Author">Authors</a></button>
+          <button type="button" class="btn btn-default navbar-btn"><a class="nav-link" href="Inventory">Inventory</a></button>
+          <button type="button" class="btn btn-default navbar-btn"><a class="nav-link" href="Book">Books</a></button>
+          <button type="button" class="btn btn-default navbar-btn"><a class="nav-link" href="Transaction">Transactions</a></button>
+        </div>
+      </nav>
+    <br>
+        <!--
         <a href="/">Home</a>
         <a href="User">Users</a>
         <a href="Author">Authors</a>
@@ -12,6 +24,7 @@
         <a href="Book">Books</a>
         <a href="Transaction">Transactions</a>
         <a href="Books_has_Authors">Books_Has_Authors</a>
+        -->
 
     {% block content %}
         <h1 class="pageTitle">{% block title %} Welcome to Books Share {% endblock %}</h1>
