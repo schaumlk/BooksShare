@@ -13,13 +13,13 @@
         <a href="Transaction">Transactions</a>
         <a href="Books_has_Authors">Books_Has_Authors</a>
 
-{% block content %}
-    <h1 class="pageTitle">{% block title %} Welcome to Books Share {% endblock %}</h1>
-    <h3 class="pageSubTitle"> Use the navigation bar above to get where you need to go.</h3>
-    <img id="homepage" className="homepage-image" alt="edit" src="{{url_for('static', filename='bookhome.jpg')}}">
-    <br>
-    <br>
-{% endblock %}
+    {% block content %}
+        <h1 class="pageTitle">{% block title %} Welcome to Books Share {% endblock %}</h1>
+        <h3 class="pageSubTitle"> Use the navigation bar above to get where you need to go.</h3>
+        <img id="homepage" className="homepage-image" alt="edit" src="{{url_for('static', filename='bookhome.jpg')}}">
+        <br>
+        <br>
+    {% endblock %}
     </body>
 </html>
 
