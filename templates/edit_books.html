@@ -1,14 +1,14 @@
 <html>
 
 <head>
-	<title>Edit Author</title>
+	<title>Edit Book</title>
     <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
     <div>
         <table border="1" cellpadding="5"> 
-            <caption> Edit This Authors's Data </caption>
+            <caption> Edit This Book's Data </caption>
             <!-- Access data tuple passed from app.py -->
             {% if data %}
                 <thead>
@@ -40,28 +40,35 @@
         </table>
         
          <div id="edit">
-            <!-- form to edit data in Authors-->
+            <!-- form to edit data in Users-->
 
-            <form id="editAuthor" action="/edit_authors/{{authorID}}" method="post">
-                <legend><strong>Edit Author</strong></legend>
+            <form id="editBook" action="/edit_books/{{bookID}}" method="post">
+                <legend><strong>Edit User</strong></legend>
                 <fieldset>
                     <!-- We can preset form inputs to match attributes currently stored for 'id' of person to be updated via value= and accessing our passed data tuple -->
                     <!-- Create hidden form input to store the passed 'id' of the person we are editing so we can access it easily in our 'POST' method in our app.py -->
-                    <input type="hidden" value="{{authorID}}" class="form-control" id="author_id" name="author_id" required>
+                    <input type="hidden" value="{{bookID}}" class="form-control" id="book_id" name="book_id" required>
                     
-                    <label for="author_fname">author_fname:</label>
-                    <input type="text" value="{{data[0].author_fname}}" class="form-control" id="author_fname" name="author_fname" required>
+                    <label for="title">title:</label>
+                    <input type="text" value="{{data[0].title}}" class="form-control" id="title" name="title" required>
                     
-                    <label for="author_lname">author_lname:</label>
-                    <input type="text" value="{{data[0].author_lname}}" class="form-control" id="author_lname" name="author_lname" required>
+                    <label for="description">description:</label>
+                    <input type="text" value="{{data[0].description}}" class="form-control" id="description" name="description" required>
                     
-                    <label for="book_id">book_id:</label>
-                    <input type="text" value="{{data[0].book_id}}" class="form-control" id="book_id" name="book_id" required>
-                                        	
+                    <label for="price">price:</label>
+                    <input type="text" value="{{data[0].price}}" class="form-control" id="price" name="price" required>
+                                        
+                    <label for="created_at">created_at:</label>
+                    <input type="text" value="{{data[0].created_at}}" class="form-control" id="created_at" name="created_at" >
+                    
+                    <label for="modifed_at">modifed_at:</label>
+                    <input type="text" value="{{data[0].modifed_at}}" class="form-control" id="modifed_at" name="modifed_at" >
+                        
+                    	
                 
                 </fieldset>
-                <input type="submit" value="Edit Author" name="Edit_Author" class="btn btn-primary" style="margin:.5rem;">
-                <a href='/Author'><input class="btn" type="button" value="cancel"></a>
+                <input type="submit" value="Edit Book" name="Edit_Book" class="btn btn-primary" style="margin:.5rem;">
+                <a href='/Book'><input class="btn" type="button" value="cancel"></a>
             </form>
 
 </body>

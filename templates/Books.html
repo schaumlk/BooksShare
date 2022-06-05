@@ -1,61 +1,150 @@
+<html>
 {% extends "base.html" %}
 {% block header %} Books Share {% endblock %}
 {% block content %}
+<!-- Adapted from the people.html UI design -->
+<head>
+	<title>Books Share</title>
+	<link href="style.css" rel="stylesheet" type="text/css" />
+	<script language="JavaScript">
+	function showform(dowhat) {
+		/*
+		 * browse, insert, update, delete- only one visible
+		 */
+		if(dowhat == 'insert') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		} 
+		else if(dowhat == 'update') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'none';
 
-        <p>&nbsp;</p>
+		} else if(dowhat == 'delete') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'block';
 
-        <div id="insert">
-            <form method="" id="">
-            <legend><strong>Search Books</strong></legend>
-            <fieldset class="field">
-                <label> Book </label> <input type="text" name="uid">
-            </fieldset>
-            <input class="btn" type="submit" id="addUser" value="Search Books">
-            </form>
-        </div>
+		} else if(dowhat == 'all') {
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'block';
+		} 
+		else { //by default display browse
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		}
+	}
 
-        <div id="browse">
-            <!-- Can include buttons here above the table -->
-            <table border="1" cellpadding="5">
-                <tr>
-                    <th>book_id</th>
-                    <th>title</th>
-                    <th>description</th>
-                    <th>price</th>
-                    <th>inventory_id</th>
-                    <th>created_at</th>
-                    <th>modified_at</th> 
-                </tr>
-                {% for book in Books %}
-                <tr>
-                    <td align="center" >{{ book.book_id }}</td>
-                    <td align="center">{{ book.title }}</td>
-                    <td align="center" >{{ book.description }}</td>
-                    <td align="center" >{{ book.price }}</td>
-                    <td align="center" >{{ book.inventory_id }}</td>
-                    <td align="center" >{{book.created_at}}</td>
-                    <td align="center" >{{book.modified_at}}</td>
-                </tr>
-                {% endfor %}
-                
-            </table>
-            <p>&nbsp;</p> <!-- just some space for looks -->
-        </div> 
-        <div id="insert">
-            <form method="" id="">
-            <legend><strong>Add Book</strong></legend>
-            <fieldset class="field">
-                <label> book_id </label> <input type="text" name="uid">
-                <label> title </label> <input type="text" name="uname">
-                <label> description </label> <input type="text" name="password">
-                <label> price </label> <input type="text" name="fname">
-                <label> inventory_id </label> <input type="text" name="fname">
-                <label> created_at </label> <input type="timestamp" name="createdat">
-                <label> modified_at </label> <input type="timestamp" name="modifiedat">
-            </fieldset>
-            <input class="btn" type="submit" id="addBook" value="Add Book">
-            <input class="btn" type="button" value="Cancel"> 
-            </form>
-        </div> <!-- insert ends -->
-        </body>
-        {% endblock %}
+	function newBook() {
+		showform('insert');
+	}
+
+	function updateBook(pid) {
+		showform('update');
+	}
+
+	function deleteBook(pid) {
+		showform('delete');
+	}
+
+	function browseBook() {
+		showform('browse');
+	}
+
+	function showAll() {
+		showform('all');
+	}
+	</script>
+</head>
+
+<body onload="browseBooks()">
+
+	<h2>Books</h2>
+	
+	<div id="browse">
+		<p><a href="#" onClick="newBook()">Add New</a> </p>
+		
+		<table border="1" cellpadding="5">
+            <!-- Access data tuple passed from app.py --> 
+            {% if data %}
+			    <thead>
+				    <tr>
+					    <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+					    
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+					
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
+
+				<tbody>
+					<!-- Now, iterate through every item in data -->
+					{% for item in data %}
+					    <tr>
+						    <!-- Then iterate through every key in the current item dictionary -->
+                            {% for key in item.keys() %}
+
+						    <!-- Create a <td> element with the value of that key in it -->
+						    <td> {{item[key]}} </td> 
+                            {% endfor %}
+
+                            <!-- Create our edit/delete buttons -->
+						    <td><a href="edit_books/{{item['book_id']}}" class="btn btn-default">Edit</a></td>
+						    <td><a href="delete_books/{{item['book_id']}}" class="btn btn-default">Delete</a></td>
+
+					    </tr> 
+                        {% endfor %} 
+                {% endif %} 
+        </table>   
+	<p>&nbsp;</p>
+	</div>	<!-- browse -->
+
+	<div id="insert">
+
+		<!-- form to INSERT new data into Users-->
+
+		<form id="insertUser" action="/Book" method="post">
+			<legend><strong>Add Book</strong></legend>
+			<fieldset>
+                <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
+				<label for="book_id">book_id:</label>
+				<input type="text" class="form-control" id="book_id" name="book_id" placeholder="" required>
+
+				<label for="title">title:</label>
+				<input type="text" class="form-control" id="title" name="title" placeholder="" required>
+
+				<label for="description">description:</label>
+				<input type="text" class="form-control" id="description" name="description" placeholder="" required>
+
+				<label for="price">price:</label>
+				<input type="text" class="form-control" id="price" name="price" placeholder="" required>
+
+				<label for="created_at">created_at:</label>
+				<input type="text" class="form-control" id="created_at" name="created_at" placeholder="" >
+
+				<label for="modified_at">modified_at:</label>
+				<input type="text" class="form-control" id="modified_at" name="modified_at" placeholder="" >
+
+
+
+
+            <!-- Create 'Add Book' and 'Cancel' buttons -->
+			<input type="submit" value="Add Book" name="Add_Book" class="btn btn-primary">
+			<input class="btn" type="button" value="Cancel" onClick="browseBooks()"> 
+        
+		</form>
+	</div><!--insert-->
+
+</body>
+{% endblock %}
+</html>

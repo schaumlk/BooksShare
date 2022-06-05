@@ -43,19 +43,19 @@
 		}
 	}
 
-	function newAuthor() {
+	function newBookHasAuthors() {
 		showform('insert');
 	}
 
-	function updateAuthor(pid) {
+	function updateBookHasAuthors(pid) {
 		showform('update');
 	}
 
-	function deleteAuthor(pid) {
+	function deleteBookHasAuthors(pid) {
 		showform('delete');
 	}
 
-	function browseAuthor() {
+	function browseBookHasAuthor() {
 		showform('browse');
 	}
 
@@ -65,12 +65,12 @@
 	</script>
 </head>
 
-<body onload="browseUsers()">
+<body onload="browseBookHasAuthors()">
 
-	<h2>Users</h2>
+	<h2>Books-Authors Relationship</h2>
 	
 	<div id="browse">
-		<p><a href="#" onClick="newUser()">Add New</a> </p>
+		<p><a href="#" onClick="newBookHasAuthors()">Add New</a> </p>
 		
 		<table border="1" cellpadding="5">
             <!-- Access data tuple passed from app.py --> 
@@ -99,8 +99,8 @@
                             {% endfor %}
 
                             <!-- Create our edit/delete buttons -->
-						    <td><a href="edit_users/{{item['user_id']}}" class="btn btn-default">Edit</a></td>
-						    <td><a href="delete_users/{{item['user_id']}}" class="btn btn-default">Delete</a></td>
+						    <td><a href="edit_BookHasAuthors/{{item['books_book_id']}}" class="btn btn-default">Edit</a></td>
+						    <td><a href="delete_BookHasAuthors/{{item['books_book_id']}}" class="btn btn-default">Delete</a></td>
 
 					    </tr> 
                         {% endfor %} 
@@ -113,40 +113,19 @@
 
 		<!-- form to INSERT new data into Users-->
 
-		<form id="insertUser" action="/User" method="post">
-			<legend><strong>Add User</strong></legend>
+		<form id="insertBookHasAuthors" action="/Books_Has_Authors" method="post">
+			<legend><strong>Add Books_Has_Authors</strong></legend>
 			<fieldset>
                 <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
-				<label for="user_id">user_id:</label>
-				<input type="text" class="form-control" id="user_id" name="user_id" placeholder="" required>
+				<label for="books_book_id">book_id:</label>
+				<input type="text" class="form-control" id="books_book_id" name="books_book_id" placeholder="" required>
 
-				<label for="username">username:</label>
-				<input type="text" class="form-control" id="username" name="username" placeholder="" required>
+				<label for="authors_author_id">author_id:</label>
+				<input type="text" class="form-control" id="authors_author_id" name="authors_author_id" placeholder="" required>
 
-				<label for="password">password:</label>
-				<input type="text" class="form-control" id="password" name="password" placeholder="" required>
-
-				<label for="first_name">first_name:</label>
-				<input type="text" class="form-control" id="first_name" name="first_name" placeholder="" required>
-
-				<label for="last_name">last_name:</label>
-				<input type="text" class="form-control" id="last_name" name="last_name" placeholder="" required>
-
-                <label for="email">email:</label>
-				<input type="text" class="form-control" id="email" name="email" placeholder="" required>
-
-				<label for="created_at">created_at:</label>
-				<input type="text" class="form-control" id="created_at" name="created_at" placeholder="" >
-
-				<label for="modified_at">modified_at:</label>
-				<input type="text" class="form-control" id="modified_at" name="modified_at" placeholder="" >
-
-
-
-
-            <!-- Create 'Add User' and 'Cancel' buttons -->
-			<input type="submit" value="Add User" name="Add_User" class="btn btn-primary">
-			<input class="btn" type="button" value="Cancel" onClick="browseUsers()"> 
+            <!-- Create 'Add Book' and 'Cancel' buttons -->
+			<input type="submit" value="Add BookHasAuthors" name="Add_Book_Has_Authors" class="btn btn-primary">
+			<input class="btn" type="button" value="Cancel" onClick="browseBookHasAuthors()"> 
         
 		</form>
 	</div><!--insert-->

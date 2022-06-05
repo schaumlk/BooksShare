@@ -1,57 +1,147 @@
+<html>
 {% extends "base.html" %}
 {% block header %} Books Share {% endblock %}
 {% block content %}
+<!-- Adapted from the people.html UI design -->
+<head>
+	<title>Books Share</title>
+	<link href="style.css" rel="stylesheet" type="text/css" />
+	<script language="JavaScript">
+	function showform(dowhat) {
+		/*
+		 * browse, insert, update, delete- only one visible
+		 */
+		if(dowhat == 'insert') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		} 
+		else if(dowhat == 'update') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'none';
 
-        <p>&nbsp;</p>
+		} else if(dowhat == 'delete') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'block';
 
-        <div id="insert">
-            <form method="" id="">
-            <legend><strong>Search Inventory</strong></legend>
-            <fieldset class="field">
-                <label> Inventory </label> <input type="text" name="uid">
-            </fieldset>
-            <input class="btn" type="submit" id="addUser" value="Search Inventory">
-            </form>
-        </div>
+		} else if(dowhat == 'all') {
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'block';
+		} 
+		else { //by default display browse
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		}
+	}
 
-        <div id="browse">
-            <!-- Can include buttons here above the table -->
-            <table border="1" cellpadding="5">
-                <tr>
-                    <th>inventory_id</th>
-                    <th>quantity</th>
-                    <th>created_at</th>
-                    <th>modified_at</th> 
-                    <th> edit</th>
-                    <th> delete</th>
-                </tr>
-                {% for inventory in Inventory %}
-                <tr>
-                    <td align="center" >{{ inventory.inventory_id }}</td>
-                    <td align="center">{{ inventory.quantity }}</td>
-                    <td align="center" >{{inventory.created_at}}</td>
-                    <td align="center" >{{inventory.modified_at}}</td>
-                    <td><button type="button"> edit </button></td>
-                    <td><button type="button"> delete </button></td>
-                </tr>
-                {% endfor %}
-                
-            </table>
-            <p>&nbsp;</p> <!-- just some space for looks -->
-        </div> 
-        <div id="insert">
-            <form method="" id="">
-            <legend><strong>Add Inventory</strong></legend>
-            <fieldset class="field">
-                <label> inventory_id </label> <input type="text" name="uid">
-                <label> quantity </label> <input type="text" name="uname">
-                <label> created_at </label> <input type="timestamp" name="createdat">
-                <label> modified_at </label> <input type="timestamp" name="modifiedat">
-            </fieldset>
-            <input class="btn" type="submit" id="addTransaction" value="Add Inventory">
-            <input class="btn" type="button" value="Cancel"> 
-            </form>
-        </div> <!-- insert ends -->
+	function newInventory() {
+		showform('insert');
+	}
 
+	function updateInventory(pid) {
+		showform('update');
+	}
+
+	function deleteInventory(pid) {
+		showform('delete');
+	}
+
+	function browseInventory() {
+		showform('browse');
+	}
+
+	function showAll() {
+		showform('all');
+	}
+	</script>
+</head>
+
+<body onload="browseInventories()">
+
+	<h2>Inventory</h2>
+	
+	<div id="browse">
+		<p><a href="#" onClick="newInventory()">Add New</a> </p>
+		
+		<table border="1" cellpadding="5">
+            <!-- Access data tuple passed from app.py --> 
+            {% if data %}
+			    <thead>
+				    <tr>
+					    <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+					    
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+					
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
+
+				<tbody>
+					<!-- Now, iterate through every item in data -->
+					{% for item in data %}
+					    <tr>
+						    <!-- Then iterate through every key in the current item dictionary -->
+                            {% for key in item.keys() %}
+
+						    <!-- Create a <td> element with the value of that key in it -->
+						    <td> {{item[key]}} </td> 
+                            {% endfor %}
+
+                            <!-- Create our edit/delete buttons -->
+						    <td><a href="edit_inventory/{{item['inventory_id']}}" class="btn btn-default">Edit</a></td>
+						    <td><a href="delete_inventory/{{item['inventory_id']}}" class="btn btn-default">Delete</a></td>
+
+					    </tr> 
+                        {% endfor %} 
+                {% endif %} 
+        </table>   
+	<p>&nbsp;</p>
+	</div>	<!-- browse -->
+
+	<div id="insert">
+
+		<!-- form to INSERT new data into Users-->
+
+		<form id="insertInventory" action="/Inventory" method="post">
+			<legend><strong>Add Inventory</strong></legend>
+			<fieldset>
+                <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
+				<label for="inventory_id">inventory_id:</label>
+				<input type="text" class="form-control" id="inventory_id" name="inventory_id" placeholder="" required>
+
+				<label for="quantity">quantity:</label>
+				<input type="text" class="form-control" id="quantity" name="quantity" placeholder="" required>
+
+				<label for="book_id">book_id:</label>
+				<input type="text" class="form-control" id="book_id" name="book_id" placeholder="" required>
+
+				<label for="created_at">created_at:</label>
+				<input type="text" class="form-control" id="created_at" name="created_at" placeholder="" >
+
+				<label for="modified_at">modified_at:</label>
+				<input type="text" class="form-control" id="modified_at" name="modified_at" placeholder="" >
+
+
+
+
+            <!-- Create 'Add Book' and 'Cancel' buttons -->
+			<input type="submit" value="Add Inventory" name="Add_Inventory" class="btn btn-primary">
+			<input class="btn" type="button" value="Cancel" onClick="browseInventories()"> 
         
-        {% endblock %}
+		</form>
+	</div><!--insert-->
+
+</body>
+{% endblock %}
+</html>

@@ -1,49 +1,150 @@
+<html>
 {% extends "base.html" %}
 {% block header %} Books Share {% endblock %}
 {% block content %}
+<!-- Adapted from the people.html UI design -->
+<head>
+	<title>Books Share</title>
+	<link href="style.css" rel="stylesheet" type="text/css" />
+	<script language="JavaScript">
+	function showform(dowhat) {
+		/*
+		 * browse, insert, update, delete- only one visible
+		 */
+		if(dowhat == 'insert') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		} 
+		else if(dowhat == 'update') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'none';
 
-        <div id="browse">
-            <!-- Can include buttons here above the table -->
-            <table border="1" cellpadding="5">
-                <tr>
-                    <th>transaction_id</th>
-                    <th>user_id</th>
-                    <th>inventory_id</th>
-                    <th>total_price</th>
-                    <th>created_at</th>
-                    <th>modified_at</th> 
-                    <th> edit</th>
-                    <th> delete</th>
-                </tr>
-                {% for transaction in Transactions %}
-                <tr>
-                    <td align="center" >{{ transaction.transaction_id }}</td>
-                    <td align="center">{{ transaction.user_id }}</td>
-                    <td align="center">{{ transaction.inventory_id }}</td>
-                    <td align="center">{{ transaction.total_price }}</td>
-                    <td align="center" >{{transaction.created_at}}</td>
-                    <td align="center" >{{transaction.modified_at}}</td>
-                    <td><button type="button"> edit </button></td>
-                    <td><button type="button"> delete </button></td>
-                </tr>
-                {% endfor %}
+		} else if(dowhat == 'delete') {
+			document.getElementById('browse').style.display = 'none';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'block';
+
+		} else if(dowhat == 'all') {
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'block';
+			document.getElementById('edit').style.display = 'block';
+			document.getElementById('delete').style.display = 'block';
+		} 
+		else { //by default display browse
+			document.getElementById('browse').style.display = 'block';
+			document.getElementById('insert').style.display = 'none';
+			document.getElementById('edit').style.display = 'none';
+			document.getElementById('delete').style.display = 'none';
+		}
+	}
+
+	function newTransaction() {
+		showform('insert');
+	}
+
+	function updateTransaction(pid) {
+		showform('update');
+	}
+
+	function deleteTransaction(pid) {
+		showform('delete');
+	}
+
+	function browseTransaction() {
+		showform('browse');
+	}
+
+	function showAll() {
+		showform('all');
+	}
+	</script>
+</head>
+
+<body onload="browseTransactions()">
+
+	<h2>Transactions</h2>
+	
+	<div id="browse">
+		<p><a href="#" onClick="newTransaction()">Add New</a> </p>
+		
+		<table border="1" cellpadding="5">
+            <!-- Access data tuple passed from app.py --> 
+            {% if data %}
+			    <thead>
+				    <tr>
+					    <!-- Iterate through each key in the first entry to get the column name -->
+                        {% for key in data[0].keys() %}
+					    
+                        <!-- Create a <th> tag with the key inside of it, this will be our header row -->
+					    <th scope="col" data-field="{{ key }}" data-filter-control="input">{{ key }}</th>
+					
+                        <!-- End of this for loop -->
+                        {% endfor %} 
+                    </tr>
+
+				<tbody>
+					<!-- Now, iterate through every item in data -->
+					{% for item in data %}
+					    <tr>
+						    <!-- Then iterate through every key in the current item dictionary -->
+                            {% for key in item.keys() %}
+
+						    <!-- Create a <td> element with the value of that key in it -->
+						    <td> {{item[key]}} </td> 
+                            {% endfor %}
+
+                            <!-- Create our edit/delete buttons -->
+						    <td><a href="edit_transactions/{{item['transaction_id']}}" class="btn btn-default">Edit</a></td>
+						    <td><a href="delete_transactions/{{item['transaction_id']}}" class="btn btn-default">Delete</a></td>
+
+					    </tr> 
+                        {% endfor %} 
+                {% endif %} 
+        </table>   
+	<p>&nbsp;</p>
+	</div>	<!-- browse -->
+
+	<div id="insert">
+
+		<!-- form to INSERT new data into Transactions-->
+
+		<form id="insertTransaction" action="/Transaction" method="post">
+			<legend><strong>Add Transaction</strong></legend>
+			<fieldset>
+                <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
+				<label for="transaction_id">transaction_id:</label>
+				<input type="text" class="form-control" id="transaction_id" name="transaction_id" placeholder="" required>
                 
-            </table>
-            <p>&nbsp;</p> <!-- just some space for looks -->
-        </div> 
-        <div id="insert">
-            <form method="" id="">
-            <legend><strong>Add Transaction</strong></legend>
-            <fieldset class="field">
-                <label> transaction_id </label> <input type="text" name="uid">
-                <label> user_id </label> <input type="text" name="uid">
-                <label> inventory_id </label> <input type="text" name="uid">
-                <label> total_price </label> <input type="text" name="uname">
-                <label> created_at </label> <input type="timestamp" name="createdat">
-                <label> modified_at </label> <input type="timestamp" name="modifiedat">
-            </fieldset>
-            <input class="btn" type="submit" id="addTransaction" value="Add Transaction">
-            <input class="btn" type="button" value="Cancel"> 
-            </form>
-        </div> <!-- insert ends -->
-        {% endblock %}
+                <label for="user_id">user_id:</label>
+				<input type="text" class="form-control" id="user_id" name="user_id" placeholder="" required>
+
+				<label for="inventory_id">inventory_id:</label>
+				<input type="text" class="form-control" id="inventory_id" name="inventory_id" placeholder="" required>
+
+				<label for="total_price">total_price:</label>
+				<input type="text" class="form-control" id="total_price" name="total_price" placeholder="" required>
+
+				<label for="created_at">created_at:</label>
+				<input type="text" class="form-control" id="created_at" name="created_at" placeholder="" >
+
+				<label for="modified_at">modified_at:</label>
+				<input type="text" class="form-control" id="modified_at" name="modified_at" placeholder="" >
+
+
+
+
+            <!-- Create 'Add Transaction' and 'Cancel' buttons -->
+			<input type="submit" value="Add Transaction" name="Add_Transaction" class="btn btn-primary">
+			<input class="btn" type="button" value="Cancel" onClick="browseTransactions()"> 
+        
+		</form>
+	</div><!--insert-->
+
+</body>
+{% endblock %}
+</html>
