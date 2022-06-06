@@ -126,8 +126,13 @@ def authors():
     cur = mysql.connection.cursor()
     cur.execute(query)
     data = cur.fetchall()
-
-    return render_template("Authors.html", data=data)
+    
+    query2 = "SELECT book_id FROM `Books` ORDER BY book_id ASC;"
+    cur = mysql.connection.cursor()
+    cur.execute(query2)
+    all_books_id = cur.fetchall()
+    
+    return render_template("Authors.html", data=data, Books_id=all_books_id)
 
 @app.route("/Author", methods=["POST"])
 def postAuthors():
