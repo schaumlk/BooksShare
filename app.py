@@ -162,8 +162,13 @@ def update_authors(id):
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
+        
+        query2 = "SELECT book_id FROM `Books` ORDER BY book_id ASC;"
+        cur = mysql.connection.cursor()
+        cur.execute(query2)
+        all_books_id = cur.fetchall()
 
-        return render_template("edit_authors.html", data=data, authorID = id)
+        return render_template("edit_authors.html", data=data, authorID = id, Books_id=all_books_id)
 
     # commit changes
     if request.method == "POST":
@@ -250,8 +255,18 @@ def update_transactions(id):
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
+        
+        query2 = "SELECT user_id FROM `Users` ORDER BY user_id ASC;"
+        cur = mysql.connection.cursor()
+        cur.execute(query2)
+        all_users_id = cur.fetchall()
+    
+        query3 = "SELECT inventory_id FROM `Inventory` ORDER BY inventory_id ASC;"
+        cur = mysql.connection.cursor()
+        cur.execute(query3)
+        all_inventories_id = cur.fetchall()
 
-        return render_template("edit_transactions.html", data=data, transactionID = id)
+        return render_template("edit_transactions.html", data=data, transactionID = id, Users_id=all_users_id, Inventories_id=all_inventories_id)
 
     # commit changes
     if request.method == "POST":
@@ -415,8 +430,13 @@ def update_inventory(id):
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
+        
+        query2 = "SELECT book_id FROM `Books` ORDER BY book_id ASC;"
+        cur = mysql.connection.cursor()
+        cur.execute(query2)
+        all_books_id = cur.fetchall()
 
-        return render_template("edit_inventory.html", data=data, inventoryID = id)
+        return render_template("edit_inventory.html", data=data, inventoryID = id, Books_id=all_books_id)
 
     # commit changes
     if request.method == "POST":
@@ -498,8 +518,18 @@ def update_books_has_authors(id):
         cur = mysql.connection.cursor()
         cur.execute(query)
         data = cur.fetchall()
+        
+        query2 = "SELECT book_id FROM `Books` ORDER BY book_id ASC;"
+        cur = mysql.connection.cursor()
+        cur.execute(query2)
+        all_books_id = cur.fetchall()
+    
+        query3 = "SELECT author_id FROM `Authors` ORDER BY author_id ASC;"
+        cur = mysql.connection.cursor()
+        cur.execute(query3)
+        all_authors_id = cur.fetchall()
 
-        return render_template("edit_books_has_authors.html", data=data, books_book_id = id)
+        return render_template("edit_books_has_authors.html", data=data, books_book_id = id, Books_id=all_books_id, Authors_id=all_authors_id)
 
     # commit changes
     if request.method == "POST":
