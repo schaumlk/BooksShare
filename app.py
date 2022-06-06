@@ -475,8 +475,18 @@ def book_has_author():
     cur = mysql.connection.cursor()
     cur.execute(query)
     data = cur.fetchall()
-
-    return render_template("Books_Has_Authors.html", data=data)
+    
+    query2 = "SELECT book_id FROM `Books` ORDER BY book_id ASC;"
+    cur = mysql.connection.cursor()
+    cur.execute(query2)
+    all_books_id = cur.fetchall()
+    
+    query3 = "SELECT author_id FROM `Authors` ORDER BY author_id ASC;"
+    cur = mysql.connection.cursor()
+    cur.execute(query3)
+    all_authors_id = cur.fetchall()
+    
+    return render_template("Books_Has_Authors.html", data=data,  Books_id=all_books_id, Authors_id=all_authors_id)
 
 # update
 @app.route("/edit_BookHasAuthors/<int:id>", methods=["POST", "GET"])
