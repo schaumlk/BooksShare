@@ -120,11 +120,19 @@
 				<label for="transaction_id">transaction_id:</label>
 				<input type="text" class="form-control" id="transaction_id" name="transaction_id" placeholder="" required>
                 
-                <label for="user_id">user_id:</label>
-				<input type="text" class="form-control" id="user_id" name="user_id" placeholder="" required>
+                		<label for="user_id">user_id:</label>
+					<select id="user_id" name="user_id">
+            				{% for item in Users_id %}
+            				<option value={{item['user_id']}} selected> {{item['user_id']}} </option>
+           				{% endfor %} 
+					</select>
 
 				<label for="inventory_id">inventory_id:</label>
-				<input type="text" class="form-control" id="inventory_id" name="inventory_id" placeholder="" required>
+					<select id="inventory_id" name="inventory_id">
+            				{% for item in Inventories_id %}
+            				<option value={{item['inventory_id']}} selected> {{item['inventory_id']}} </option>
+           				{% endfor %} 
+					</select>
 
 				<label for="total_price">total_price:</label>
 				<input type="text" class="form-control" id="total_price" name="total_price" placeholder="" required>
