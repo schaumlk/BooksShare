@@ -49,11 +49,19 @@
                     <!-- Create hidden form input to store the passed 'id' of the person we are editing so we can access it easily in our 'POST' method in our app.py -->
                     <input type="hidden" value="{{transactionID}}" class="form-control" id="transaction_id" name="transaction_id" required>
                     
-                    <label for="user_id">user_id:</label>
-                    <input type="text" value="{{data[0].user_id}}" class="form-control" id="user_id" name="user_id" required>
-                    
-                    <label for="inventory_id">inventory_id:</label>
-                    <input type="text" value="{{data[0].inventory_id}}" class="form-control" id="inventory_id" name="inventory_id" required>
+			<label for="user_id">user_id:</label>
+				<select id="user_id" name="user_id">
+				{% for item in Users_id %}
+            			<option value={{item['user_id']}} selected> {{item['user_id']}} </option>
+           			{% endfor %} 
+				</select>
+
+			<label for="inventory_id">inventory_id:</label>
+				<select id="inventory_id" name="inventory_id">
+            			{% for item in Inventories_id %}
+            			<option value={{item['inventory_id']}} selected> {{item['inventory_id']}} </option>
+           			{% endfor %} 
+				</select>
                     
                     <label for="total_price">total_price:</label>
                     <input type="text" value="{{data[0].total_price}}" class="form-control" id="total_price" name="total_price" required>
