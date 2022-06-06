@@ -118,10 +118,18 @@
 			<fieldset>
                 <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
 				<label for="books_book_id">book_id:</label>
-				<input type="text" class="form-control" id="books_book_id" name="books_book_id" placeholder="" required>
+					<select id="book_id" name="book_id">
+            				{% for item in Books_id %}
+            				<option value={{item['book_id']}} selected> {{item['book_id']}} </option>
+           				{% endfor %} 
+					</select>
 
 				<label for="authors_author_id">author_id:</label>
-				<input type="text" class="form-control" id="authors_author_id" name="authors_author_id" placeholder="" required>
+					<select id="author_id" name="author_id">
+            				{% for item in Authors_id %}
+            				<option value={{item['author_id']}} selected> {{item['author_id']}} </option>
+           				{% endfor %} 
+					</select>
 
             <!-- Create 'Add Book' and 'Cancel' buttons -->
 			<input type="submit" value="Add BookHasAuthors" name="Add_Book_Has_Authors" class="btn btn-primary">
