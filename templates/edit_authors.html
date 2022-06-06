@@ -56,7 +56,11 @@
                     <input type="text" value="{{data[0].author_lname}}" class="form-control" id="author_lname" name="author_lname" required>
                     
                     <label for="book_id">book_id:</label>
-                    <input type="text" value="{{data[0].book_id}}" class="form-control" id="book_id" name="book_id" required>
+			<select id="book_id" name="book_id">
+			{% for item in Books_id %}
+			<option value={{item['book_id']}} selected> {{item['book_id']}} </option>
+			{% endfor %} 
+			</select>
                                         	
                 
                 </fieldset>
