@@ -47,11 +47,19 @@
                 <fieldset>
                     <!-- We can preset form inputs to match attributes currently stored for 'id' of person to be updated via value= and accessing our passed data tuple -->
                     <!-- Create hidden form input to store the passed 'id' of the person we are editing so we can access it easily in our 'POST' method in our app.py -->
-                    <label for="books_book_id">books_book_id:</label>
-                    <input type="text" value="{{data[0].books_book_id}}" class="form-control" id="books_book_id" name="books_book_id" required>
-                    
-                    <label for="authors_author_id">authors_author_id:</label>
-                    <input type="text" value="{{data[0].authors_author_id}}" class="form-control" id="authors_author_id" name="authors_author_id" >
+		    <label for="books_book_id">book_id:</label>
+			<select id="book_id" name="book_id">
+            		{% for item in Books_id %}
+            		<option value={{item['book_id']}} selected> {{item['book_id']}} </option>
+           		{% endfor %} 
+			</select>
+			
+		    <label for="authors_author_id">author_id:</label>
+			<select id="author_id" name="author_id">
+            		{% for item in Authors_id %}
+            		<option value={{item['author_id']}} selected> {{item['author_id']}} </option>
+           		{% endfor %} 
+			</select>
                                         	
                 
                 </fieldset>
