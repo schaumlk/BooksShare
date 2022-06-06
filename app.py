@@ -228,8 +228,18 @@ def transactions():
     cur = mysql.connection.cursor()
     cur.execute(query)
     data = cur.fetchall()
-
-    return render_template("Transactions.html",data=data)
+    
+    query2 = "SELECT user_id FROM `Users` ORDER BY user_id ASC;"
+    cur = mysql.connection.cursor()
+    cur.execute(query2)
+    all_users_id = cur.fetchall()
+    
+    query3 = "SELECT inventory_id FROM `Inventory` ORDER BY inventory_id ASC;"
+    cur = mysql.connection.cursor()
+    cur.execute(query3)
+    all_inventories_id = cur.fetchall()
+    
+    return render_template("Transactions.html",data=data, Users_id=all_users_id, Inventories_id=all_inventories_id)
 
 # update
 @app.route("/edit_transactions/<int:id>", methods=["POST", "GET"])
@@ -387,8 +397,13 @@ def inventory():
     cur = mysql.connection.cursor()
     cur.execute(query)
     data = cur.fetchall()
+    
+    query2 = "SELECT book_id FROM `Books` ORDER BY book_id ASC;"
+    cur = mysql.connection.cursor()
+    cur.execute(query2)
+    all_books_id = cur.fetchall()
 
-    return render_template("Inventory.html", data=data)
+    return render_template("Inventory.html", data=data, Books_id=all_books_id)
 
 # update
 @app.route("/edit_inventory/<int:id>", methods=["POST", "GET"])
