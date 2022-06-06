@@ -124,7 +124,11 @@
 				<input type="text" class="form-control" id="quantity" name="quantity" placeholder="" required>
 
 				<label for="book_id">book_id:</label>
-				<input type="text" class="form-control" id="book_id" name="book_id" placeholder="" required>
+					<select id="book_id" name="book_id">
+            				{% for item in Books_id %}
+            				<option value={{item['book_id']}} selected> {{item['book_id']}} </option>
+           				{% endfor %} 
+					</select>
 
 				<label for="created_at">created_at:</label>
 				<input type="text" class="form-control" id="created_at" name="created_at" placeholder="" >
